@@ -27,7 +27,7 @@ void lerAresta(Vertice **cabecas, int n)
 {
     int v1, v2, peso;
 
-    while (v1 < 0 || v1 > n || v2 < 0 || v2 > n)
+    do
     {
         printf("Insira os vértices: ");
         scanf("%d %d", &v1, &v2);
@@ -38,7 +38,7 @@ void lerAresta(Vertice **cabecas, int n)
         {
             printf("Valores inválidos!\n");
         }
-    }
+    } while (v1 < 0 || v1 > n || v2 < 0 || v2 > n);
 
     Vertice *novoVertice = (Vertice *)malloc(sizeof(Vertice));
     novoVertice->peso = peso;
@@ -78,8 +78,11 @@ int main()
 {
     int menu, n;
     
-    printf("Insira o número de vértices do grafo: ");
-    scanf("%d", &n);
+    do
+    {
+        printf("Insira o número de vértices do grafo: ");
+        scanf("%d", &n);
+    } while (n < 0 || n > 19);
     
     Vertice **cabecas = criaCabecas(n);
 
@@ -87,11 +90,26 @@ int main()
     {
         do
         {
-            
-        } while (menu != 0);
-        
+            printf("\n -- Menu -- \n");
+            printf("1. Ler Aresta\n");
+            printf("2. Imprimir Grafo\n");
+            printf("3. Limpar e Sair\n");
+            scanf("%d", &menu);
+        } while (menu < 1 || menu > 3);
+
+        switch (menu)
+        {
+            case 1:
+                lerAresta(cabecas, n);
+                break;
+            case 2:
+                imprimirGrafo(cabecas, n);
+                break;
+            case 3:
+                //sair(cabecas, n);
+                break;
+        }
     }
     
-    
-    
+    return 0;
 }
