@@ -25,24 +25,24 @@ Vertice **criaCabecas(int n)
 
 void lerAresta(Vertice **cabecas, int n)
 {
-    int v1, v2, peso;
-
+    int v1 = -1, v2 = -1, peso;
     do
     {
-        printf("Insira os vértices: ");
+        printf("\nInsira os vértices: ");
         scanf("%d %d", &v1, &v2);
         printf("Insira o peso: ");
         scanf("%d", &peso);
 
-        if (v1 < 0 || v1 > n || v2 < 0 || v2 > n)
+        if (v1 < 0 || v1 > n - 1 || v2 < 0 || v2 > n - 1)
         {
             printf("Valores inválidos!\n");
         }
-    } while (v1 < 0 || v1 > n || v2 < 0 || v2 > n);
+    } while (v1 < 0 || v1 > n - 1|| v2 < 0 || v2 > n - 1);
 
     Vertice *novoVertice = (Vertice *)malloc(sizeof(Vertice));
     novoVertice->peso = peso;
     novoVertice->vertice = v2;
+    novoVertice->conexao = NULL;
 
     Vertice *aux = cabecas[v1];
     
@@ -60,23 +60,43 @@ void imprimirGrafo(Vertice **cabecas, int n)
 
     for (int i = 0; i < n; i++)
     {
-        imprimir = cabecas[i];
-        printf("\n |%d|->", i);
-
-        while (imprimir->conexao != NULL)
+        if (cabecas[i] != NULL)
         {
-            imprimir = imprimir->conexao;
-            printf(" |%d|%d|->", imprimir->vertice, imprimir->peso);
-        }
+            imprimir = cabecas[i];
+            printf("\n |%d|", i);
+
+            while (imprimir->conexao != NULL)
+            {
+                imprimir = imprimir->conexao;
+                printf("-> |%d|%d|", imprimir->vertice, imprimir->peso);
+            }
         
-        printf("\n");
+            printf("\n");
+        }
+    }
+}
+
+void sair(Vertice **cabecas, int n)
+{    
+    for (int i = 0; i < n; i++)
+    {
+        Vertice *atual = cabecas[i];
+        while (atual != NULL)
+        {
+            Vertice *prox = atual->conexao;
+            free(atual);
+            atual = prox;
+        }
+        cabecas[i] = NULL;
     }
     
+    free(cabecas);
+    exit(0);
 }
 
 int main()
 {
-    int menu, n;
+    int menu = 0, n = -1;
     
     do
     {
@@ -106,7 +126,7 @@ int main()
                 imprimirGrafo(cabecas, n);
                 break;
             case 3:
-                //sair(cabecas, n);
+                sair(cabecas, n);
                 break;
         }
     }
